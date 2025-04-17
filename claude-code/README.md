@@ -28,6 +28,12 @@ from the options it presents and it will not complain again.
 Authorize `claude` once and it'll persist your authorization in the
 `~/.config/claude/claude.json` file and not ask again.
 
+You probably want to persist these settings as well:
+
+```
+claude config set -g autoUpdaterStatus disabled
+```
+
 ## Run Instructions
 
 Run the container:
@@ -41,7 +47,8 @@ docker run -it --rm \
 
 You can obviously make that a shell alias for ease of use.
 
-If you want an instance of the container with a shell so you can explore inside and what not just run:
+If you want an instance of the container with a shell so you can explore inside
+or use the `clause` CLI to change and persist settings and what not just run:
 
 ```bash
 docker run -it --rm \
