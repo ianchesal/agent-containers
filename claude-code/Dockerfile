@@ -3,7 +3,7 @@ FROM python:3.9-slim
 RUN useradd -m codeuser
 
 RUN apt-get update && \
-  apt-get install -y nodejs npm && \
+  apt-get install -y nodejs npm git && \
   rm -rf /var/lib/apt/lists/*
 
 
