@@ -3,6 +3,7 @@ FROM node:23-slim
 RUN useradd -m codeuser
 
 RUN apt-get update && \
+  apt-get install -y git && \
   rm -rf /var/lib/apt/lists/*
 
 
@@ -16,4 +17,4 @@ USER codeuser
 
 # Change this to alter the default start-up behavior
 # of codex when it launches.
-CMD ["codex --approval-mode auto-edit"]
+CMD ["codex", "--approval-mode", "auto-edit"]
