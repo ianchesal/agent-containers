@@ -8,6 +8,12 @@ session as well. As a lot of these agents store your API credentials _in_ their
 configuration files, you should be really cautious about checking in config to
 some place like your dotfiles repo.
 
+## Prerequisites
+
+You'll need either [Docker](https://www.docker.com/) (preferably running
+rootless) or [podman](https://podman.io/) installed on your system to build and
+launch these containers.
+
 ## Building
 
 To build all the containers:
