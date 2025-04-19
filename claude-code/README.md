@@ -52,7 +52,7 @@ or use the `clause` CLI to change and persist settings and what not just run:
 
 ```bash
 docker run -it --rm \
-  -v ${HOME}/.config/claude/claude.json:/home/codeuser/.claude.json:rw \
+  -v ${HOME}/.config/claude:/home/codeuser/.claude:rw \
   -v $(pwd):/app:rw \
   claude-code \
   bash
