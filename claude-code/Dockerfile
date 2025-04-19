@@ -3,7 +3,7 @@ FROM python:3.9-slim
 RUN useradd -m codeuser
 
 RUN apt-get update && \
-  apt-get install -y nodejs npm git && \
+  apt-get install -y nodejs npm git curl jq ripgrep vim nano make zip unzip ssh-client wget tree && \
   rm -rf /var/lib/apt/lists/*
 
 
