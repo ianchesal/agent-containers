@@ -6,6 +6,9 @@
 docker build -t claude-code .
 ```
 
+You can add more tools to the `apt-install` section of the `Dockerfile` if
+you'd like to make more things available to claude during your sessions.
+
 ## First time setup
 
 You only need to do this once. It helps persist your configuration between
@@ -41,6 +44,7 @@ Run the container:
 ```bash
 docker run -it --rm \
   -v ${HOME}/.config/claude/claude.json:/home/codeuser/.claude.json:rw \
+  -v ${HOME}/.config/claude/CLAUDE.md:/home/codeuser/.claude/CLAUDE.md:rw \
   -v $(pwd):/app:rw \
   claude-code
 ```
@@ -51,8 +55,10 @@ If you want an instance of the container with a shell so you can explore inside
 or use the `clause` CLI to change and persist settings and what not just run:
 
 ```bash
+
 docker run -it --rm \
   -v ${HOME}/.config/claude/claude.json:/home/codeuser/.claude.json:rw \
+  -v ${HOME}/.config/claude/CLAUDE.md:/home/codeuser/.claude/CLAUDE.md:rw \
   -v $(pwd):/app:rw \
   claude-code \
   bash
