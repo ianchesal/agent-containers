@@ -12,11 +12,11 @@ all: claude-code openai-codex
 
 claude-code:
 	@echo "Building claude-code"
-	$(CONTAINER_ENGINE) build -t claude-code -f claude-code/Dockerfile claude-code
+	$(CONTAINER_ENGINE) build --no-cache -t claude-code -f claude-code/Dockerfile claude-code
 
 openai-codex:
 	@echo "Building openai-codex"
-	$(CONTAINER_ENGINE) build -t openai-codex -f openai-codex/Dockerfile openai-codex
+	$(CONTAINER_ENGINE) build --no-cache -t openai-codex -f openai-codex/Dockerfile openai-codex
 
 clean:
 	@echo "Removing container images"
@@ -32,6 +32,8 @@ clean:
 	else \
 		echo "Image openai-codex does not exist, skipping"; \
 	fi
+	@echo "Removing all build cache to ensure clean builds..."
+	@$(CONTAINER_ENGINE) builder prune -af
 	@echo "Removing dangling images (cached layers)..."
 	@$(CONTAINER_ENGINE) image prune -f
 
