@@ -1,6 +1,6 @@
 FROM python:3.13-slim
 
-# RUN useradd -m codeuser
+RUN useradd -m codeuser
 
 RUN \
   apt-get update && \
@@ -10,16 +10,18 @@ RUN \
   apt-get update && \
   apt-get install -y nodejs && \
   node -v && \
-  npm -v && \
-  mkdir -p /root/.npm-global && \
-  npm config set prefix /root/.npm-global && \
-  echo 'export PATH=/root/.npm-global/bin:$PATH' >> /root/.bashrc && \
-  npm install -g @anthropic-ai/claude-code
+  npm -v
 
 WORKDIR /app
 
-# RUN chown -R codeuser:codeuser /app
-#
-# USER codeuser
+RUN chown -R codeuser:codeuser /app
 
-CMD ["/root/.npm-global/bin/claude"]
+USER codeuser
+
+RUN \
+  mkdir -p /home/codeuser/.npm-global && \
+  npm config set prefix /home/codeuser/.npm-global && \
+  echo 'export PATH=/home/codeuser/.npm-global/bin:$PATH' >> /home/codeuser/.bashrc && \
+  npm install -g @anthropic-ai/claude-code
+
+CMD ["/home/codeuser/.npm-global/bin/claude"]
