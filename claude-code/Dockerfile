@@ -15,6 +15,6 @@ USER codeuser
 RUN mkdir -p ~/.npm-global && \
   npm config set prefix ~/.npm-global && \
   echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc && \
-  npm install -g @anthropic-ai/claude-code@0.2.90
+  npm install -g @anthropic-ai/claude-code
 
 CMD ["/home/codeuser/.npm-global/bin/claude"]
