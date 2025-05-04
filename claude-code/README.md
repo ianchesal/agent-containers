@@ -39,6 +39,9 @@ claude config set -g autoUpdaterStatus disabled
 
 ## Run Instructions
 
+Note: If you're running rootless `podman` you'll need to add `--userns=keep-id`
+to these instructions.
+
 Run the container:
 
 ```bash
