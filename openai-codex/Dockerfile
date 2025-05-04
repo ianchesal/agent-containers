@@ -1,13 +1,11 @@
 FROM node:23-slim
 
-RUN useradd -m codeuser
-
 RUN apt-get update && \
-  apt-get install -y git imagemagick && \
-  rm -rf /var/lib/apt/lists/*
-
-
-RUN npm install -g @openai/codex
+  apt-get install -y git curl jq ripgrep vim nano make zip unzip ssh-client wget tree imagemagick && \
+  rm -rf /var/lib/apt/lists/* && \
+  node -v && \
+  npm -v && \
+  useradd -m codeuser
 
 WORKDIR /app
 
@@ -15,6 +13,10 @@ RUN chown -R codeuser:codeuser /app
 
 USER codeuser
 
-# Change this to alter the default start-up behavior
-# of codex when it launches.
-CMD ["codex", "--approval-mode", "auto-edit"]
+RUN \
+  mkdir -p /home/codeuser/.npm-global && \
+  npm config set prefix /home/codeuser/.npm-global && \
+  echo 'export PATH=/home/codeuser/.npm-global/bin:$PATH' >> /home/codeuser/.bashrc && \
+  npm install -g @openai/codex
+
+CMD ["/home/codeuser/.npm-global/bin/codex", "--approval-mode", "auto-edit"]
