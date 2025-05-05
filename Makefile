@@ -3,6 +3,10 @@
 # Determine container engine (podman or docker)
 CONTAINER_ENGINE := $(shell which podman 2>/dev/null || which docker 2>/dev/null)
 
+# UID/GID
+HOST_UID := $(shell id -u)
+HOST_GID := $(shell id -g)
+
 # Ensure we have a container engine
 ifeq ($(CONTAINER_ENGINE),)
 $(error No container engine (podman/docker) found in PATH)
@@ -12,11 +16,11 @@ all: claude-code openai-codex
 
 claude-code:
 	@echo "Building claude-code"
-	$(CONTAINER_ENGINE) build --no-cache -t claude-code -f claude-code/Dockerfile claude-code
+	$(CONTAINER_ENGINE) build --build-arg HOST_UID=$(HOST_UID) --build-arg HOST_GID=$(HOST_GID) --no-cache -t claude-code -f claude-code/Dockerfile claude-code
 
 openai-codex:
 	@echo "Building openai-codex"
-	$(CONTAINER_ENGINE) build --no-cache -t openai-codex -f openai-codex/Dockerfile openai-codex
+	$(CONTAINER_ENGINE) build --build-arg HOST_UID=$(HOST_UID) --build-arg HOST_GID=$(HOST_GID) --no-cache -t openai-codex -f openai-codex/Dockerfile openai-codex
 
 clean:
 	@echo "Removing container images"

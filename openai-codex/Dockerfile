@@ -1,11 +1,16 @@
 FROM node:23-slim
 
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+
+RUN groupadd --gid=${HOST_GID} --non-unique codeuser && \
+  useradd --uid=${HOST_UID} --gid=${HOST_GID} --non-unique --create-home codeuser
+
 RUN apt-get update && \
   apt-get install -y git curl jq ripgrep vim nano make zip unzip ssh-client wget tree imagemagick && \
   rm -rf /var/lib/apt/lists/* && \
   node -v && \
-  npm -v && \
-  useradd -m codeuser
+  npm -v
 
 WORKDIR /app
 
