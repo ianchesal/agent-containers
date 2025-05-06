@@ -2,9 +2,15 @@
 
 ## Build Instructions
 
+Use the top level `Makefile` to build this. It injects things in to the build
+so the container works correctly for your user under `podman`.
+
 ```bash
-docker build -t openai-codex .
+make openai-codex
 ```
+
+You can add more local tools to the container to be installed via `apt-get` by
+extending the `LOCAL_TOOLS` list in the top-level `Makefile`.
 
 ## First time setup
 
