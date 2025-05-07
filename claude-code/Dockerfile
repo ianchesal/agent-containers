@@ -23,9 +23,12 @@ RUN chown -R codeuser:codeuser /app
 
 USER codeuser
 
+COPY ./.bash_aliases /home/codeuser/.bash_aliases
+
 RUN \
   mkdir -p /home/codeuser/.npm-global && \
   npm config set prefix /home/codeuser/.npm-global && \
+  echo '' >> /home/codeuser/.bashrc && \
   echo 'export PATH=/home/codeuser/.npm-global/bin:$PATH' >> /home/codeuser/.bashrc && \
   npm install -g @anthropic-ai/claude-code
 

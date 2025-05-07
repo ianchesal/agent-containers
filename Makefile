@@ -18,6 +18,8 @@ endif
 all: claude-code openai-codex
 
 claude-code:
+	@echo "Copying bash_aliases to claude-code directory"
+	cp common/bash_aliases claude-code/.bash_aliases
 	@echo "Building claude-code"
 	$(CONTAINER_ENGINE) build \
 		--build-arg HOST_UID=$(HOST_UID) \
@@ -28,6 +30,8 @@ claude-code:
 		-f claude-code/Dockerfile claude-code
 
 openai-codex:
+	@echo "Copying bash_aliases to openai-codex directory"
+	cp common/bash_aliases openai-codex/.bash_aliases
 	@echo "Building openai-codex"
 	$(CONTAINER_ENGINE) build \
 		--build-arg HOST_UID=$(HOST_UID) \
