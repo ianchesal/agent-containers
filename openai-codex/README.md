@@ -39,6 +39,9 @@ the container as below.
 Note: If you're running rootless `podman` you'll need to add `--userns=keep-id`
 to these instructions.
 
+Note: See the rep [README](../README.md) for some nice shell functions for
+launching these containers.
+
 ```bash
 docker run -it --rm \
   -e OPENAI_API_KEY \

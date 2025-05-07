@@ -50,7 +50,7 @@ Run the container:
 ```bash
 docker run -it --rm \
   -v ${HOME}/.config/claude/claude.json:/home/codeuser/.claude.json:rw \
-  -v ${HOME}/.config/claude/CLAUDE.md:/home/codeuser/.claude/CLAUDE.md:rw \
+  -v ${HOME}/.config/claude:/home/codeuser/.claude:rw \
   -v $(pwd):/app:rw \
   claude-code
 ```
