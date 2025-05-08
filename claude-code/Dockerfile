@@ -14,8 +14,8 @@ RUN \
   curl -fsSL https://deb.nodesource.com/setup_22.x | bash && \
   apt-get update && \
   apt-get install -y nodejs && \
-  node -v && \
-  npm -v
+  echo "Node version: $(node -v)" && \
+  echo "npm version:  $(npm -v)"
 
 WORKDIR /app
 
@@ -30,6 +30,13 @@ RUN \
   npm config set prefix /home/codeuser/.npm-global && \
   echo '' >> /home/codeuser/.bashrc && \
   echo 'export PATH=/home/codeuser/.npm-global/bin:$PATH' >> /home/codeuser/.bashrc && \
-  npm install -g @anthropic-ai/claude-code
+  npm install -g @anthropic-ai/claude-code && \
+  echo "" && \
+  echo "\e[34m=================================================================\e[0m" && \
+  echo "\e[34m                   CLAUDE CODE VERSION                           \e[0m" && \
+  echo "\e[34m=================================================================\e[0m" && \
+  echo "\e[34m" && /home/codeuser/.npm-global/bin/claude --version && \
+  echo "\e[0m" && \
+  echo ""
 
 CMD ["/home/codeuser/.npm-global/bin/claude"]
