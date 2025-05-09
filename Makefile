@@ -1,4 +1,4 @@
-.PHONY: all clean claude-code openai-codex
+.PHONY: all clean deep-clean claude-code openai-codex
 
 # Determine container engine (podman or docker)
 CONTAINER_ENGINE := $(shell which podman 2>/dev/null || which docker 2>/dev/null)
@@ -9,6 +9,14 @@ HOST_GID := $(shell id -g)
 
 # Tools to install in to the containers with apt-get
 LOCAL_TOOLS := "git curl jq ripgrep vim nano make zip unzip ssh-client wget tree imagemagick build-essential"
+
+# Build options for caching control (set to 1 to disable cache)
+DISABLE_CACHE ?= 0
+CACHE_FROM ?=
+
+# Cache control flag based on DISABLE_CACHE
+CACHE_FLAG := $(if $(filter 1,$(DISABLE_CACHE)),--no-cache,)
+CACHE_FROM_FLAG := $(if $(CACHE_FROM),--cache-from $(CACHE_FROM),)
 
 # Ensure we have a container engine
 ifeq ($(CONTAINER_ENGINE),)
@@ -25,7 +33,8 @@ claude-code:
 		--build-arg HOST_UID=$(HOST_UID) \
 		--build-arg HOST_GID=$(HOST_GID)	\
 		--build-arg LOCAL_TOOLS=$(LOCAL_TOOLS) \
-		--no-cache \
+		$(CACHE_FLAG) \
+		$(CACHE_FROM_FLAG) \
 		-t claude-code \
 		-f claude-code/Dockerfile claude-code
 
@@ -37,7 +46,8 @@ openai-codex:
 		--build-arg HOST_UID=$(HOST_UID) \
 		--build-arg HOST_GID=$(HOST_GID) \
 		--build-arg LOCAL_TOOLS=$(LOCAL_TOOLS) \
-		--no-cache \
+		$(CACHE_FLAG) \
+		$(CACHE_FROM_FLAG) \
 		-t openai-codex \
 		-f openai-codex/Dockerfile openai-codex
 
@@ -55,8 +65,10 @@ clean:
 	else \
 		echo "Image openai-codex does not exist, skipping"; \
 	fi
-	@echo "Removing all build cache to ensure clean builds..."
-	@$(CONTAINER_ENGINE) builder prune -af
-	@echo "Removing dangling images (cached layers)..."
+	@echo "Removing dangling images (unused layers)..."
 	@$(CONTAINER_ENGINE) image prune -f
+
+deep-clean: clean
+	@echo "Removing all build cache (use with caution)..."
+	@$(CONTAINER_ENGINE) builder prune -f --filter until=24h
 

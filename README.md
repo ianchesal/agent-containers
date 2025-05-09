@@ -28,6 +28,33 @@ To build any specific container use the directory name. For example:
 make claude-code
 ```
 
+### Build Options
+
+The build system supports caching control options:
+
+```bash
+# Build with caching (default)
+make claude-code
+
+# Build without cache
+make claude-code DISABLE_CACHE=1
+
+# Build using a specific image as cache source
+make claude-code CACHE_FROM=claude-code:latest
+```
+
+### Cleaning
+
+To remove built images:
+
+```bash
+# Remove images but preserve build cache
+make clean
+
+# Remove images and prune build cache older than 24h
+make deep-clean
+```
+
 ## Running
 
 See the README files in the sub-directories for instructions on initial setup,
