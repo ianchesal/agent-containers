@@ -1,4 +1,4 @@
-.PHONY: all clean deep-clean claude-code openai-codex
+.PHONY: all clean deep-clean base claude-code openai-codex
 
 # Determine container engine (podman or docker)
 CONTAINER_ENGINE := $(shell which podman 2>/dev/null || which docker 2>/dev/null)
@@ -23,29 +23,32 @@ ifeq ($(CONTAINER_ENGINE),)
 $(error No container engine (podman/docker) found in PATH)
 endif
 
-all: claude-code openai-codex
+all: base claude-code openai-codex
 
-claude-code:
-	@echo "Copying bash_aliases to claude-code directory"
-	cp common/bash_aliases claude-code/.bash_aliases
-	@echo "Building claude-code"
+base:
+	@echo "Copying bash_aliases to base directory"
+	cp common/bash_aliases base/.bash_aliases
+	@echo "Building base image"
 	$(CONTAINER_ENGINE) build \
 		--build-arg HOST_UID=$(HOST_UID) \
-		--build-arg HOST_GID=$(HOST_GID)	\
+		--build-arg HOST_GID=$(HOST_GID) \
 		--build-arg LOCAL_TOOLS=$(LOCAL_TOOLS) \
+		$(CACHE_FLAG) \
+		$(CACHE_FROM_FLAG) \
+		-t agent-base \
+		-f base/Dockerfile base
+
+claude-code: base
+	@echo "Building claude-code"
+	$(CONTAINER_ENGINE) build \
 		$(CACHE_FLAG) \
 		$(CACHE_FROM_FLAG) \
 		-t claude-code \
 		-f claude-code/Dockerfile claude-code
 
-openai-codex:
-	@echo "Copying bash_aliases to openai-codex directory"
-	cp common/bash_aliases openai-codex/.bash_aliases
+openai-codex: base
 	@echo "Building openai-codex"
 	$(CONTAINER_ENGINE) build \
-		--build-arg HOST_UID=$(HOST_UID) \
-		--build-arg HOST_GID=$(HOST_GID) \
-		--build-arg LOCAL_TOOLS=$(LOCAL_TOOLS) \
 		$(CACHE_FLAG) \
 		$(CACHE_FROM_FLAG) \
 		-t openai-codex \
@@ -64,6 +67,12 @@ clean:
 		$(CONTAINER_ENGINE) rmi -f openai-codex; \
 	else \
 		echo "Image openai-codex does not exist, skipping"; \
+	fi
+	@if $(CONTAINER_ENGINE) image inspect agent-base > /dev/null 2>&1; then \
+		echo "Removing agent-base"; \
+		$(CONTAINER_ENGINE) rmi -f agent-base; \
+	else \
+		echo "Image agent-base does not exist, skipping"; \
 	fi
 	@echo "Removing dangling images (unused layers)..."
 	@$(CONTAINER_ENGINE) image prune -f

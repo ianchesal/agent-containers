@@ -28,12 +28,28 @@ To build any specific container use the directory name. For example:
 make claude-code
 ```
 
+### Architecture
+
+The project uses a common base image (`agent-base`) that contains shared dependencies and configuration. Tool-specific images extend this base with their unique requirements:
+
+```
+agent-base
+├── claude-code
+└── openai-codex
+```
+
 ### Build Options
 
 The build system supports caching control options:
 
 ```bash
-# Build with caching (default)
+# Build all containers (base, claude-code, openai-codex)
+make all
+
+# Build just the base image
+make base
+
+# Build a specific tool (automatically builds base if needed)
 make claude-code
 
 # Build without cache
