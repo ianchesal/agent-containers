@@ -1,3 +1,0 @@
-# Ignore .bash_aliases files in subdirectories
-claude-code/.bash_aliases
-openai-codex/.bash_aliases

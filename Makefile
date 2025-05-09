@@ -26,8 +26,6 @@ endif
 all: base claude-code openai-codex
 
 base:
-	@echo "Copying bash_aliases to base directory"
-	cp common/bash_aliases base/.bash_aliases
 	@echo "Building base image"
 	$(CONTAINER_ENGINE) build \
 		--build-arg HOST_UID=$(HOST_UID) \
