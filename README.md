@@ -30,13 +30,21 @@ make claude-code
 
 ### Architecture
 
-The project uses a common base image (`agent-base`) that contains shared dependencies and configuration. Tool-specific images extend this base with their unique requirements:
+The project uses a multi-stage build approach with a common base image
+(`agent-base`) that contains shared dependencies and configuration.
+Tool-specific images extend this base with their unique requirements:
 
 ```
 agent-base
 ├── claude-code
 └── openai-codex
 ```
+
+Each Dockerfile uses multi-stage builds to:
+- Separate build-time dependencies from runtime dependencies
+- Minimize final image sizes by ~20-40%
+- Improve security by reducing the attack surface
+- Speed up builds through better layer caching
 
 ### Build Options
 
