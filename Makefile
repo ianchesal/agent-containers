@@ -76,6 +76,10 @@ clean:
 	@$(CONTAINER_ENGINE) image prune -f
 
 deep-clean: clean
-	@echo "Removing all build cache (use with caution)..."
-	@$(CONTAINER_ENGINE) builder prune -f --filter until=24h
+	@echo "Removing all build cache and containers (use with caution)..."
+	@$(CONTAINER_ENGINE) builder prune -af
+	@echo "Removing all containers..."
+	@$(CONTAINER_ENGINE) container prune -f
+	@echo "Removing all unused volumes..."
+	@$(CONTAINER_ENGINE) volume prune -f
 
